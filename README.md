@@ -32,7 +32,6 @@ def findNeighbors2(partition_data):
         _iterator.append([item_ids[_id], b_vectors.loc[each]["item_id"].tolist()[1:]])
 
     return iter(_iterator)
-
 index = faiss.IndexFlatL2(emb_size)   # build the index
 print(index.is_trained)
 index.add(np.array(vectors['embedding'].tolist()).astype("float32"))                  # add vectors to the index
@@ -46,3 +45,5 @@ broadcasted_index = sc.broadcast(index)
 i2i = item_emb.rdd.repartition(int(item_emb.count()/5000))\
             .mapPartitions(findNeighbors2)\
             .toDF(['item_id','sim_item_id'])
+
+
